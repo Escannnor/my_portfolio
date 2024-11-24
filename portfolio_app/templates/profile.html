@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+</head>
+<body>
+    <h1>My Profile</h1>
+    <p>Name: Escanor</p>
+    <p>Skills: Python, Django, Web Development</p>
+    <p>Achievements:</p>
+    <ul>
+        {% for achievement in achievements %}
+        <li>{{ achievement.name }} - {{ achievement.description }} (Awarded on: {{ achievement.date_awarded }})</li>
+        {% endfor %}
+    </ul>
+    <p>Total Projects Uploaded: {{ total_projects }}</p>
+    <p>Explore my <a href="{% url 'projects' %}">projects</a>.</p>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>My Portfolio</h1>
+        <button id="darkModeToggle">Toggle Dark Mode</button>
+    </header>
+    <nav class="navbar">
+        <li><a href="/">Home</a></li>
+        <li><a href="/profile/">Profile</a></li>
+        <li><a href="/projects/">Projects</a></li>
+    </nav>
+    <section id="about">
+        <h2>About Me</h2>
+        <p>Welcome to my portfolio!</p>
+    </section>
+    <!-- Navigation Bar -->
+    <header>
+        <h1>Welcome to My Portfolio</h1>
+        <p>I have uploaded a total of {{ total_projects }} projects so far. Check them out below!</p>
+
+        <nav>
+            <ul class="navbar">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About Me</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section with Swiper Slider -->
+    <section id="home" class="swiper-container hero-slider">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="{% static 'images/pic1.jpg' %}" alt="Slide 1"></div>
+            <div class="swiper-slide"><img src="{% static 'images/pic2.jpg' %}" alt="Slide 2"></div>
+            <div class="swiper-slide"><img src="{% static 'images/pic3.jpg' %}" alt="Slide 3"></div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- About Me Section -->
+        <section id="about" data-aos="fade-up">
+            <h2>About Me</h2>
+            <p>
+                Hi! I'm Agboke Sodiq, a Data analyst and Python developer passionate about creating impactful solutions with code. 
+                This is my portfolio showcasing my skills and projects.
+            </p>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" data-aos="fade-up">
+            <h2>My Projects</h2>
+            <div class="admin-links">
+                <a href="{% url 'upload_project' %}" class="btn">Upload a New Project</a>
+                <a href="{% url 'display_graph' %}" class="btn">View Sample Graph</a>
+            </div>
+
+            <!-- Graph Display -->
+            <div class="graph-container">
+                <img src="{% url 'display_graph' %}" alt="Graph">
+            </div>
+
+            <!-- Projects List -->
+            <div class="project-list">
+                {% for project in projects %}
+                <div class="project-item" data-aos="fade-up">
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.description }}</p>
+                    <div class="project-links">
+                        {% if project.github_link %}
+                            <a href="{{ project.github_link }}" target="_blank" class="btn">View on GitHub</a>
+                        {% endif %}
+                        {% if project.file %}
+                            <a href="{{ project.file.url }}" download class="btn">Download Project File</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section id="achievements" data-aos="fade-up">
+            <h2>My Achievements</h2>
+            <div class="achievement-list">
+                {% for achievement in achievements %}
+                <div class="achievement-item">
+                    <h3>{{ achievement.name }}</h3>
+                    <p>{{ achievement.description }}</p>
+                    <p class="date">Awarded: {{ achievement.date_awarded }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" data-aos="fade-up">
+            <h2>Contact Me</h2>
+            <div class="contact-info">
+                <p><i class="fas fa-envelope"></i> Email: sawdickagboke@gmail.com</p>
+                <p><i class="fas fa-phone"></i> Phone: +234 8182852767</p>
+                <p><i class="fab fa-github"></i> GitHub: <a href="https://github.com/yourusername">123</a></p>
+                <p><i class="fab fa-linkedin"></i> LinkedIn: <a href="https://linkedin.com/in/sawdickagboke">sawdickagboke</a></p>
+                <p><i class="fab fa-twitter"></i> X: <a href="https://twitter.com/sawdickagboke">@sawdickagboke</a></p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 My Portfolio. All rights reserved.</p>
+        <button onclick="toggleDarkMode()" class="dark-mode-toggle">
+            <i class="fas fa-moon"></i> Toggle Dark Mode
+        </button>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://kit.fontawesome.com/your-kit-code.js"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Initialize Swiper
+        const swiper = new Swiper('.hero-slider', {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            }
+        });
+
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const button = document.querySelector('.dark-mode-toggle');
+            button.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+</html>
